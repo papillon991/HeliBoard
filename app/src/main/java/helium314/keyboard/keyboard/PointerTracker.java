@@ -38,6 +38,7 @@ import helium314.keyboard.latin.settings.Settings;
 import helium314.keyboard.latin.settings.SettingsValues;
 import helium314.keyboard.latin.utils.KtxKt;
 import helium314.keyboard.latin.utils.Log;
+import helium314.keyboard.latin.utils.TouchLog;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -1133,6 +1134,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                 && (currentKey.getCode() == currentRepeatingKeyCode) && !isInDraggingFinger) {
             return;
         }
+        if (currentKey != null && Settings.getValues().mTouchLogEnabled) {
+            TouchLog.log(mKeyboard, currentKey, CoordinateUtils.x(mDownCoordinates), CoordinateUtils.y(mDownCoordinates),
+                    x, y, eventTime - mDownTime);
+        }
         detectAndSendKey(currentKey, mKeyX, mKeyY, eventTime);
         if (isInSlidingKeyInput) {
             callListenerOnFinishSlidingInput();
@@ -1173,6 +1178,13 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (code == KeyCode.LANGUAGE_SWITCH
                 || (code == Constants.CODE_SPACE && key.getPopupKeys() == null && Settings.getValues().mSpaceForLangChange)
         ) {
+            // Long pressing the language key jumps to the target keyboard, if one is set
+            if (code == KeyCode.LANGUAGE_SWITCH
+                    && sListener.onCustomRequest(KeyboardActionListener.CustomAction.SWITCH_TO_TARGET_IME)) {
+                cancelKeyTracking();
+                sListener.onReleaseKey(code, false);
+                return;
+            }
             // Long pressing the space key invokes IME switcher dialog.
             if (sListener.onCustomRequest(KeyboardActionListener.CustomAction.SHOW_INPUT_METHOD_PICKER)) {
                 cancelKeyTracking();

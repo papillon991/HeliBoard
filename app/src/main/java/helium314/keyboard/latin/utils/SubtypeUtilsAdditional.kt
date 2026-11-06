@@ -178,6 +178,16 @@ object SubtypeUtilsAdditional {
         }*/
         if (isEmojiCapable)
             extraValueItems.add(ExtraValue.EMOJI_CAPABLE)
+
+        // combining rules follow the main layout. Appended after the stored extra values, and the last value wins
+        // in InputMethodSubtype.getExtraValueOf, so changing the layout in settings also changes the combiner
+        if (mainLayoutName == "naratgeul") {
+            extraValueItems.add("${ExtraValue.COMBINING_RULES}=naratgeul")
+        } else if (locale.language == "ko") {
+            extraValueItems.add("${ExtraValue.COMBINING_RULES}=hangul")
+        } else if (mainLayoutName == "bn_khipro") {
+            extraValueItems.add("${ExtraValue.COMBINING_RULES}=bn_khipro")
+        }
         extraValueItems.add(ExtraValue.IS_ADDITIONAL_SUBTYPE)
         return extraValueItems.joinToString(",")
     }

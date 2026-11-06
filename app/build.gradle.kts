@@ -14,12 +14,25 @@ android {
         minSdk = 21
         targetSdk = 37
         versionCode = 4300
-        versionName = "4.3-beta1"
+        // CI sets BUILD_NUMBER so every release gets a unique, increasing versionName
+        versionName = "4.3-beta1" + (System.getenv("BUILD_NUMBER")?.let { ".$it" } ?: "")
         ndk {
             abiFilters.clear()
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
         }
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+    }
+
+    // fork: sign debug builds with a fixed key so updates work. The key and password live outside the repo
+    // (~/.gradle/gradle.properties locally, Secrets in CI). Without them the SDK's default debug key is used.
+    val forkPassword = (findProperty("FORK_STORE_PASSWORD") as String?)?.takeIf { it.isNotEmpty() }
+    if (forkPassword != null) {
+        signingConfigs.getByName("debug") {
+            storeFile = file(findProperty("FORK_STORE_FILE") as String)
+            storePassword = forkPassword
+            keyAlias = "fork"
+            keyPassword = forkPassword
+        }
     }
 
     buildTypes {

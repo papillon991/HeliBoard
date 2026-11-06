@@ -78,6 +78,9 @@
     <string name="show_language_switch_key">Language switch key</string>
     <!-- Option for setting whether language switch key should switch internal layouts only, or also to other keyboards -->
     <string name="language_switch_key_behavior">Language switch key behavior</string>
+    <!-- Option for choosing an input method the language key jumps to on long press -->
+    <string name="language_switch_target_ime">Language key long-press keyboard</string>
+    <string name="language_switch_target_none">None</string>
     <!-- Option to show shortcut key to emoji palettes -->
     <string name="show_emoji_key">Emoji key</string>
     <!-- Option to show shortcut key to d-pad -->
@@ -297,6 +300,9 @@
     <string name="incognito">Force incognito mode</string>
     <!-- Description for "prefs_force_incognito_mode" option. -->
     <string name="prefs_force_incognito_mode_summary">Disable learning of new words</string>
+    <!-- Option to log touches on the naratgeul layout -->
+    <string name="touch_log">Touch log (Naratgeul)</string>
+    <string name="touch_log_summary">Save touch positions and pressed keys to a local file for tuning the layout. Pressed keys reveal what you type. Password fields are skipped.</string>
     <!-- Content description for "popup keys" suggestions view -->
     <string name="more_keys_strip_description">More keys</string>
     <!-- Title for input language & layout selection screen -->
@@ -485,6 +491,7 @@
     <string name="subtype_generic_sebeolsik_390">%s (Sebeolsik 390)</string>
     <!-- Description for "LANGUAGE_NAME" (Sebeolsik Final) keyboard subtype with explicit keyboard layout -->
     <string name="subtype_generic_sebeolsik_final">%s (Sebeolsik Final)</string>
+    <string name="subtype_generic_naratgeul">%s (Naratgeul)</string>
     <!-- Description for "LANGUAGE_NAME" (Student) keyboard subtype with explicit keyboard layout -->
     <string name="subtype_generic_student">%s (Student)</string>
     <!-- This string is displayed in a language list that allows to choose a language for

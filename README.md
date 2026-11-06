@@ -1,10 +1,15 @@
 # HeliBoard
+
+> This repository is a modified version of [HeliBoard](https://github.com/HeliBorg/HeliBoard), licensed under GPL-3.0. Changes made on 2026-11-06 and earlier add the Korean Naratgeul layout and a personal release workflow.
+
 HeliBoard is a privacy-conscious and customizable open-source keyboard, based on AOSP / OpenBoard.
 Does not use internet permission, and thus is 100% offline.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/helium314.keyboard/)
 [<img src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" alt="Get APK from GitHub" height="80">](https://github.com/HeliBorg/HeliBoard/releases/latest)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">](https://apt.izzysoft.de/fdroid/index/apk/helium314.keyboard)
+
+> **Fork note:** this fork adds a one-handed 12-key Korean layout, Naratgeul (나랏글). See [NARATGEUL.md](NARATGEUL.md). Everything else follows upstream.
 
 ## Table of Contents
 

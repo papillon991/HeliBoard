@@ -453,6 +453,33 @@ f""", // no newline at the end
         assertEquals(kb.sortedKeys.size, keys.sumOf { it.size })
     }
 
+    @Test fun `naratgeul has only its own keys`() {
+        val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
+        val (kb, keys) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.ALPHABET)
+        assertEquals(listOf(5, 5, 5, 5), keys.map { it.size }, "keys: " + keys.map { row -> row.map { it.mLabel ?: it.mCode } })
+        assertEquals(20, kb.sortedKeys.size)
+        keys.forEach { row -> assertEquals(1f, row.sumOf { it.mWidth.toDouble() }.toFloat(), 0.0001f) }
+        // columns are aligned across rows
+        (0 until 5).forEach { column ->
+            assertEquals(1, keys.map { it[column].mWidth }.distinct().size, "widths in column $column")
+        }
+        kb.sortedKeys.forEach { assertTrue(it.width > 0, "key ${it.label} has width ${it.width}") }
+    }
+
+    @Test fun `naratgeul ssang key has symbol popups`() {
+        val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
+        val (kb, _) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.ALPHABET)
+        val ssang = kb.sortedKeys.first { it.code == KeyCode.NARATGEUL_SSANG }
+        assertEquals(listOf('#'.code, ':'.code), ssang.popupKeys?.map { it.mCode })
+    }
+
+    @Test fun `naratgeul symbols still have functional keys`() {
+        val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
+        val (kb, _) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.SYMBOLS)
+        assertTrue(kb.sortedKeys.any { it.code == KeyCode.DELETE })
+        assertTrue(kb.sortedKeys.any { it.code == KeyCode.ALPHA || it.code == KeyCode.SYMBOL_ALPHA })
+    }
+
     @Test fun `dvorak has 4 rows`() {
         val editorInfo = EditorInfo()
         val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.ENGLISH, "dvorak", true)
