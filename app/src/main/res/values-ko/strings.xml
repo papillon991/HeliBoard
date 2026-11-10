@@ -101,7 +101,7 @@
     <string name="language_switch_target_ime">언어 키 길게 누르면 전환할 키보드</string>
     <string name="language_switch_target_none">없음</string>
     <string name="touch_log">터치 로그 (나랏글)</string>
-    <string name="touch_log_summary">자판 조정용으로 터치 위치와 누른 키를 기기 안 파일에 저장합니다. 누른 키로 입력 내용을 알 수 있습니다. 비밀번호 칸은 저장하지 않습니다.</string>
+    <string name="touch_log_summary">자판 조정용으로 터치 위치와 누른 키를 기기 안 파일에 저장합니다. 누른 키로 입력 내용을 알 수 있습니다. 비밀번호 칸과 시크릿 모드는 저장하지 않고, 끄면 파일을 지웁니다.</string>
     <string name="auto_correction_confidence">자동 교정 정확도</string>
     <string name="settings_category_suggestions">제안</string>
     <string name="settings_category_experimental">실험</string>

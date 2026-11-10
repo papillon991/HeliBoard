@@ -179,8 +179,17 @@ object SubtypeLocaleUtils {
         return mainLayoutName // should never happen...
     }
 
+    /** Combining rules follow the main layout for naratgeul, so changing the layout in settings also changes the combiner.
+     *  Decided here instead of in the extra values, because extra values must survive the round trip through SettingsSubtype. */
     @JvmStatic
-    fun getCombiningRulesExtraValue(subtype: InputMethodSubtype): String? = subtype.getExtraValueOf(ExtraValue.COMBINING_RULES)
+    fun getCombiningRulesExtraValue(subtype: InputMethodSubtype): String? {
+        val stored = subtype.getExtraValueOf(ExtraValue.COMBINING_RULES)
+        return when {
+            subtype.mainLayoutName() == "naratgeul" -> "naratgeul"
+            stored == "naratgeul" -> "hangul" // layout changed from naratgeul to another korean layout
+            else -> stored
+        }
+    }
 
     // Special language code to represent "no language".
     const val NO_LANGUAGE = "zz"

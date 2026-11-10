@@ -49,8 +49,8 @@ A one-handed Korean input method added by this fork. It types all of Hangul with
 
 Turning on **Touch log (Naratgeul)** in the advanced settings records touches for tuning the layout. Off by default.
 
-- What is recorded: key presses on the Naratgeul alphabet layout. Other layouts and password fields are excluded. Popup keys picked by long press are not recorded.
-- File: `no_backup/touch_log.tsv` in the app's internal storage. It is excluded from backups, never sent anywhere, and stops growing at 5 MB. The pressed keys can reveal what you typed, so delete it when you are done.
+- What is recorded: key presses on the Naratgeul alphabet layout. Other layouts, password fields and incognito mode are excluded. Popup keys picked by long press are not recorded.
+- File: `no_backup/touch_log.tsv` in the app's internal storage. It is excluded from backups, never sent anywhere, and stops growing at 5 MB. The pressed keys can reveal what you typed, so turn it off when you are done: that deletes the file.
 - Columns: time, key code, label, press position, release position, press duration, key position and size
 
 ```
