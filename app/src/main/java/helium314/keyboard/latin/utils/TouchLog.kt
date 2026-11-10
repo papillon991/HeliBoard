@@ -33,7 +33,8 @@ object TouchLog {
     fun log(keyboard: Keyboard, key: Key, downX: Int, downY: Int, upX: Int, upY: Int, holdMs: Long) {
         val id = keyboard.mId
         if (!id.element.isAlphabet || id.subtype.mainLayoutName != "naratgeul") return
-        if (Settings.getValues().mInputAttributes.mIsPasswordField) return
+        // incognito covers password fields, fields that ask for no learning, and forced incognito mode
+        if (Settings.getValues().mIncognitoModeEnabled) return
         val target = file ?: return
         val line = formatLine(System.currentTimeMillis(), key.code, key.label, downX, downY, upX, upY, holdMs,
             key.x, key.y, key.width, key.height)
@@ -44,6 +45,13 @@ object TouchLog {
         time: Long, code: Int, label: String?, downX: Int, downY: Int, upX: Int, upY: Int, holdMs: Long,
         keyX: Int, keyY: Int, keyWidth: Int, keyHeight: Int
     ) = "$time\t$code\t${label.orEmpty()}\t$downX\t$downY\t$upX\t$upY\t$holdMs\t$keyX\t$keyY\t$keyWidth\t$keyHeight\n"
+
+    /** Deletes the log, called when logging is turned off. Runs on the writer thread, after any pending lines */
+    @JvmStatic
+    fun delete() {
+        val target = file ?: return
+        executor.execute { target.delete() }
+    }
 
     internal fun append(target: File, line: String) {
         try {

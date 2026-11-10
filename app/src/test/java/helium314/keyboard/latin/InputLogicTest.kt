@@ -991,6 +991,19 @@ class InputLogicTest {
         assertEquals("hangul", SubtypeLocaleUtils.getCombiningRulesExtraValue(backToKorean.toAdditionalSubtype()))
     }
 
+    // settings find enabled and selected subtypes by comparing SettingsSubtypes, so the round trip must not change them
+    @Test fun naratgeulSubtypesSurviveRoundTrip() {
+        val korean = SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale()).first().toSettingsSubtype()
+        val naratgeul = SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale())
+            .first { it.mainLayoutName() == "naratgeul" }.toSettingsSubtype()
+        listOf(
+            korean.withLayout(LayoutType.SYMBOLS, "symbols_arabic"),
+            korean.withLayout(LayoutType.MAIN, "naratgeul"),
+            naratgeul.withLayout(LayoutType.SYMBOLS, "symbols_arabic"),
+            naratgeul.withLayout(LayoutType.MAIN, "korean"),
+        ).forEach { assertEquals(it, it.toAdditionalSubtype().toSettingsSubtype()) }
+    }
+
     // ------- helper functions ---------
 
     // should be called before every test, so the same state is guaranteed

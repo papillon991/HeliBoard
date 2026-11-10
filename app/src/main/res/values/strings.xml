@@ -302,7 +302,7 @@
     <string name="prefs_force_incognito_mode_summary">Disable learning of new words</string>
     <!-- Option to log touches on the naratgeul layout -->
     <string name="touch_log">Touch log (Naratgeul)</string>
-    <string name="touch_log_summary">Save touch positions and pressed keys to a local file for tuning the layout. Pressed keys reveal what you type. Password fields are skipped.</string>
+    <string name="touch_log_summary">Save touch positions and pressed keys to a local file for tuning the layout. Pressed keys reveal what you type. Password fields and incognito mode are skipped. Turning it off deletes the file.</string>
     <!-- Content description for "popup keys" suggestions view -->
     <string name="more_keys_strip_description">More keys</string>
     <!-- Title for input language & layout selection screen -->
