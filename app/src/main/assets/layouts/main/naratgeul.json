@@ -152,10 +152,10 @@
       "width": 20,
       "popup": {
         "main": {
-            "label": "`"
+            "label": "-"
         },
         "relevant": [
-          { "label": "-" }
+          { "label": "`" }
         ]
       }
     },

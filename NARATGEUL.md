@@ -15,7 +15,7 @@ A one-handed Korean input method added by this fork. It types all of Hangul with
 - Consonant keys: ㄱ ㄴ ㄹ ㅁ ㅅ ㅇ
 - Vowel keys: ㅏㅓ, ㅗㅜ (pressing the same key again toggles ㅏ↔ㅓ, ㅗ↔ㅜ), ㅣ, ㅡ
 - **획** (stroke): adds a stroke to the previous letter. **쌍** (double): turns it into a double consonant.
-- Long press: consonant and vowel keys give the digits 1-9 and 0, 획 gives `` ` `` and `-`, 쌍 gives `#` and `:`, `?` gives `'`, `(` gives `)`, `.` gives `,`.
+- Long press: consonant and vowel keys give the digits 1-9 and 0, 획 gives `-` and `` ` ``, 쌍 gives `#` and `:`, `?` gives `'`, `(` gives `)`, `.` gives `,`.
 
 ## Input rules
 
