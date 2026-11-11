@@ -11,7 +11,7 @@ A one-handed Korean input method added by this fork. It types all of Hangul with
 !#1  획   ㅡ   쌍    .
 ```
 
-- All five columns are 20% wide. Touch logs of one-handed right thumb typing showed taps drifting toward the middle, so the rarely used left column gave up width to the right column (backspace, space, enter).
+- The four left columns are 20.5% wide and the right column (backspace, space, enter) 18%.
 - Consonant keys: ㄱ ㄴ ㄹ ㅁ ㅅ ㅇ
 - Vowel keys: ㅏㅓ, ㅗㅜ (pressing the same key again toggles ㅏ↔ㅓ, ㅗ↔ㅜ), ㅣ, ㅡ
 - **획** (stroke): adds a stroke to the previous letter. **쌍** (double): turns it into a double consonant.
