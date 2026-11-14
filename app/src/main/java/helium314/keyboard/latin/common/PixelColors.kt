@@ -102,9 +102,15 @@ class PixelColors(context: Context, backgroundImage: Drawable?) : Colors {
             KEY_PREVIEW_BACKGROUND ->
                 replaceBackground(view) { PixelShape(unit, paper, ink, paperLight, paperDark) }
             STRIP_BACKGROUND ->
-                if (view is SuggestionStripView) replaceBackground(view) { PixelStrip(unit, plate, ink, plateLight, desk) }
-                // words and toolbar keys lie on the strip: nothing until pressed
-                else replaceBackground(view) { PixelKey(unit, 0, 0, 0, 0, raised, 0, true) }
+                if (view is SuggestionStripView) {
+                    replaceBackground(view) { PixelStrip(unit, plate, ink, plateLight, desk) }
+                } else {
+                    // The strip keeps the first drawable of its toolbar key and copies it for other keys later,
+                    // so that drawable gets the strip color like in the other styles before it is replaced.
+                    if (view.background !is PixelDrawable) base.setBackground(view, color)
+                    // words and toolbar keys lie on the strip: nothing until pressed
+                    replaceBackground(view) { PixelKey(unit, 0, 0, 0, 0, raised, 0, true) }
+                }
             else -> base.setBackground(view, color)
         }
     }
