@@ -106,7 +106,10 @@ class PixelColors(context: Context, backgroundImage: Drawable?) : Colors {
                 replaceBackground(view) { PixelShape(unit, paper, ink, paperLight, paperDark) }
             STRIP_BACKGROUND ->
                 if (view is SuggestionStripView) {
-                    replaceBackground(view) { PixelStrip(unit, plate, ink, plateLight, desk) }
+                    // The emoji tab strip and the clipboard strip share this view's first drawable and are never
+                    // colored themselves: the other styles rely on the tint spreading to them. Keep that working.
+                    if (view.background !is PixelDrawable) base.setBackground(view, color)
+                    band(view)
                 } else {
                     // The strip keeps the first drawable of its toolbar key and copies it for other keys later,
                     // so that drawable gets the strip color like in the other styles before it is replaced.
@@ -117,6 +120,9 @@ class PixelColors(context: Context, backgroundImage: Drawable?) : Colors {
             else -> base.setBackground(view, color)
         }
     }
+
+    /** makes [view] a strip like the suggestion strip: a bakelite band with an ink line and a light line on top */
+    fun band(view: View) = replaceBackground(view) { PixelStrip(unit, plate, ink, plateLight, desk) }
 
     /** sets a pixel drawable once per view, and keeps the padding the style's drawable gave the view */
     private fun replaceBackground(view: View, create: () -> Drawable) {
