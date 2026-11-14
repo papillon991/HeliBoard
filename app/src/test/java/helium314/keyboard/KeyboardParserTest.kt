@@ -476,7 +476,7 @@ f""", // no newline at the end
     @Test fun `naratgeul space key has an icon`() {
         val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
         val (kb, _) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.ALPHABET)
-        val space = kb.sortedKeys.first { it.code == Constants.CODE_SPACE }
+        val space = kb.sortedKeys.first { it.code == ' '.code }
         assertEquals("space_key_for_number_layout", space.iconName)
         assertEquals(Key.BACKGROUND_TYPE_SPACEBAR, space.backgroundType)
     }
