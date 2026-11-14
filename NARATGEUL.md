@@ -12,6 +12,7 @@ A one-handed Korean input method added by this fork. It types all of Hangul with
 ```
 
 - The four left columns are 20.5% wide and the right column (backspace, space, enter) 18%.
+- The space key shows the space icon that number layouts have: it is a square key among others, and would be blank. The language name is not drawn over it.
 - Consonant keys: ㄱ ㄴ ㄹ ㅁ ㅅ ㅇ
 - Vowel keys: ㅏㅓ, ㅗㅜ (pressing the same key again toggles ㅏ↔ㅓ, ㅗ↔ㅜ), ㅣ, ㅡ
 - **획** (stroke): adds a stroke to the previous letter. **쌍** (double): turns it into a double consonant.
