@@ -182,6 +182,7 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
 
     override fun onCustomRequest(request: KeyboardActionListener.CustomAction) = when (request) {
         KeyboardActionListener.CustomAction.SHOW_INPUT_METHOD_PICKER -> latinIME.showInputPickerDialog()
+        KeyboardActionListener.CustomAction.SWITCH_TO_TARGET_IME -> latinIME.switchToTargetIme()
         KeyboardActionListener.CustomAction.TOUCHPAD_ON -> {
             keyboardSwitcher.mainKeyboardView?.alpha = 0.5f
             true

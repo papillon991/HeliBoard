@@ -19,6 +19,7 @@ import helium314.keyboard.keyboard.KeyboardId;
 import helium314.keyboard.keyboard.internal.keyboard_parser.LocaleKeyboardInfos;
 import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode;
 import helium314.keyboard.latin.R;
+import helium314.keyboard.latin.common.PixelColors;
 import helium314.keyboard.latin.settings.Settings;
 import helium314.keyboard.latin.settings.SettingsValues;
 import helium314.keyboard.latin.utils.ResourceUtils;
@@ -244,6 +245,13 @@ public class KeyboardParams {
                     R.styleable.Keyboard_horizontalGap, 1, 1, 0) * sv.mKeyGapScale;
             mRelativeVerticalGap = keyboardAttr.getFraction(
                     R.styleable.Keyboard_verticalGap, 1, 1, 0) * sv.mKeyGapScale;
+            if (sv.mColors instanceof PixelColors) {
+                // Pixel style: two cells between keys in both directions instead of a share of the keyboard's size,
+                // so the gap is as wide as it is high and lies on the grid. A keyboard without gaps keeps none.
+                final float gap = 2 * ((PixelColors) sv.mColors).getUnit() * sv.mKeyGapScale;
+                if (mRelativeHorizontalGap > 0) mRelativeHorizontalGap = gap / width;
+                if (mRelativeVerticalGap > 0) mRelativeVerticalGap = gap / height;
+            }
             mHorizontalGap = (int) (mRelativeHorizontalGap * width);
             mVerticalGap = (int) (mRelativeVerticalGap * height);
 

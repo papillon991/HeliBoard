@@ -160,9 +160,13 @@ object KeyLabel {
     }
 
     private fun getSpaceLabel(params: KeyboardParams): String =
-        if (params.mId.element.takesFunctionalKeys || params.mId.element.isBottomRow)
+        // fork: the space key of the naratgeul layout is one square key among others, and blank without an icon
+        if ((params.mId.element.takesFunctionalKeys || params.mId.element.isBottomRow) && !isNaratgeulAlphabet(params))
             "!icon/space_key|!code/key_space"
         else "!icon/space_key_for_number_layout|!code/key_space"
+
+    private fun isNaratgeulAlphabet(params: KeyboardParams): Boolean =
+        params.mId.element.isAlphabet && params.mId.subtype.mainLayoutName == "naratgeul"
 
     // todo (later): should this be handled with metaState? but metaState shift would require LOTS of changes...
     private fun getActionKeyCode(params: KeyboardParams): String {

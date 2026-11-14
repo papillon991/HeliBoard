@@ -188,6 +188,20 @@ object KeyCode {
     // Valid in popups and for toolbar key long press only
     const val KEY_REPEAT =                -11000
 
+    // Naratgeul (나랏글) 3×4 one-handed Korean keyboard
+    const val NARATGEUL_GIYEOK =           -10100  // ㄱ
+    const val NARATGEUL_NIEUN =            -10101  // ㄴ
+    const val NARATGEUL_RIEUL =            -10102  // ㄹ
+    const val NARATGEUL_MIEUM =            -10103  // ㅁ
+    const val NARATGEUL_SIOT =             -10104  // ㅅ
+    const val NARATGEUL_IEUNG =            -10105  // ㅇ
+    const val NARATGEUL_A_EO =             -10106  // ㅏ/ㅓ toggle
+    const val NARATGEUL_O_U =              -10107  // ㅗ/ㅜ toggle
+    const val NARATGEUL_I =                -10108  // ㅣ
+    const val NARATGEUL_EU =               -10109  // ㅡ
+    const val NARATGEUL_STROKE =           -10110  // 획추가
+    const val NARATGEUL_SSANG =            -10111  // 쌍자음
+
     // Intents
     const val SEND_INTENT_ONE =            -20000
     const val SEND_INTENT_TWO =            -20001
@@ -212,6 +226,9 @@ object KeyCode {
         TIMESTAMP, CTRL_LEFT, CTRL_RIGHT, ALT_LEFT, ALT_RIGHT, META_LEFT, META_RIGHT, SEND_INTENT_ONE, SEND_INTENT_TWO,
         SEND_INTENT_THREE, EMOJI_SEARCH, INLINE_EMOJI_SEARCH_DONE, META_LOCK,
         BACKGROUND_GATHERING, BACKGROUND_GATHERING_TEMP_OFF, DPAD,
+        NARATGEUL_GIYEOK, NARATGEUL_NIEUN, NARATGEUL_RIEUL, NARATGEUL_MIEUM,
+        NARATGEUL_SIOT, NARATGEUL_IEUNG, NARATGEUL_A_EO, NARATGEUL_O_U,
+        NARATGEUL_I, NARATGEUL_EU, NARATGEUL_STROKE, NARATGEUL_SSANG
         -> this
 
         KEY_REPEAT if (longPress) -> this

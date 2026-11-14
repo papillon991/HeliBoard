@@ -102,7 +102,9 @@ class KeyboardParser(private val params: KeyboardParams, private val context: Co
 
         val numberRow = getNumberRow()
         addNumberRowOrPopupKeys(baseKeys, numberRow)
-        if (element.isAlphabet)
+        // naratgeul alphabet layout contains its functional keys, and has no room for automatically added ones
+        val isNaratgeulAlphabet = element.isAlphabet && params.mId.subtype.mainLayoutName == "naratgeul"
+        if (element.isAlphabet && !isNaratgeulAlphabet)
             addSymbolPopupKeys(baseKeys)
         if (element.isAlphaOrSymbol && params.mId.numberRowEnabled) {
             val newLabelFlags = defaultLabelFlags or
@@ -112,7 +114,8 @@ class KeyboardParser(private val params: KeyboardParams, private val context: Co
         if (!params.mAllowRedundantPopupKeys)
             params.baseKeys = baseKeys.flatMap { row -> row.map { it.toKeyParams(params) } }
 
-        val allFunctionalKeys = LayoutParser.parseLayout(LayoutType.FUNCTIONAL, params, context)
+        val allFunctionalKeys = if (isNaratgeulAlphabet) mutableListOf(mutableListOf<KeyData>())
+            else LayoutParser.parseLayout(LayoutType.FUNCTIONAL, params, context)
         adjustBottomFunctionalRowAndBaseKeys(allFunctionalKeys, baseKeys)
 
         if (allFunctionalKeys.none { it.singleOrNull()?.isKeyPlaceholder() == true })
@@ -332,7 +335,7 @@ class KeyboardParser(private val params: KeyboardParams, private val context: Co
 
     // some layouts have numbers hardcoded in the main layout (pcqwerty as keys, and others as popups)
     private fun hasBuiltInNumbers() = when (params.mId.subtype.mainLayoutName) {
-        "pcqwerty" -> true
+        "pcqwerty", "naratgeul" -> true
         "lao", "thai", "korean_sebeolsik_390", "korean_sebeolsik_final" -> params.mPopupKeyOrder.contains(POPUP_KEYS_LAYOUT)
         else -> false
     }

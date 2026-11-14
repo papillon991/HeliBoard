@@ -48,6 +48,7 @@ import helium314.keyboard.latin.utils.previewDark
 import androidx.core.content.edit
 import helium314.keyboard.keyboard.internal.keyboard_parser.LocaleKeyboardInfos
 import helium314.keyboard.latin.utils.Log
+import helium314.keyboard.latin.utils.TouchLog
 import helium314.keyboard.latin.utils.getActivity
 
 @Composable
@@ -88,6 +89,7 @@ fun AdvancedSettingsScreen(
         R.string.settings_category_experimental,
         Settings.PREF_EMOJI_MAX_SDK,
         Settings.PREF_URL_DETECTION,
+        Settings.PREF_TOUCH_LOG,
         Settings.PREF_ENABLE_HARDWARE_KEYBOARD,
         if (BuildConfig.BUILD_TYPE != "nouserlib") SettingsWithoutKey.LOAD_GESTURE_LIB else null
     )
@@ -104,6 +106,9 @@ fun createAdvancedSettings(context: Context) = listOf(
         R.string.incognito, R.string.prefs_force_incognito_mode_summary)
     {
         SwitchPreference(it, Defaults.PREF_ALWAYS_INCOGNITO_MODE) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    },
+    Setting(context, Settings.PREF_TOUCH_LOG, R.string.touch_log, R.string.touch_log_summary) {
+        SwitchPreference(it, Defaults.PREF_TOUCH_LOG) { enabled -> if (!enabled) TouchLog.delete() }
     },
     Setting(context, Settings.PREF_KEY_LONGPRESS_TIMEOUT, R.string.prefs_key_longpress_timeout_settings) { setting ->
         SliderPreference(
