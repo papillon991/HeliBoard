@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 테마 지침의 색. Px.java와 같은 값이고, 원본은 아이콘 팩의 tools/palette.tsv (tools/build_colours.py가 만든다) -->
+<resources>
+    <color name="px_desk">#FF1A1716</color>
+    <color name="px_plate">#FF2B2724</color>
+    <color name="px_plate_light">#FF46413E</color>
+    <color name="px_plate_dark">#FF1A1716</color>
+    <color name="px_raised">#FF3A3330</color>
+    <color name="px_raised_light">#FF4A433D</color>
+    <color name="px_ink">#FF1E1A18</color>
+    <color name="px_ink_sub">#FF5A4331</color>
+    <color name="px_paper">#FFEDE5CF</color>
+    <color name="px_paper_light">#FFF7F2E2</color>
+    <color name="px_paper_dark">#FFD2C6AA</color>
+    <color name="px_text">#FFEDE5CF</color>
+    <color name="px_sub">#FFD2C6AA</color>
+    <color name="px_dim">#FFA99D80</color>
+    <color name="px_hint">#FF8C959C</color>
+    <color name="px_red_text">#FFE86F5F</color>
+    <color name="px_red">#FFC23B30</color>
+    <color name="px_red_deep">#FF8C2A25</color>
+    <color name="px_blue_text">#FF86B5D0</color>
+    <color name="px_blue">#FF6F97A8</color>
+    <color name="px_blue_deep">#FF3E6D88</color>
+    <color name="px_brass">#FFCFA64B</color>
+    <color name="px_warn">#FFD8752A</color>
+    <color name="px_ok">#FF94D27A</color>
+    <color name="px_icon_plate">#FFD8D1BC</color>
+</resources>

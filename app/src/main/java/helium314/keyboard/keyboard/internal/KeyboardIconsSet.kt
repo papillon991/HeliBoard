@@ -25,6 +25,7 @@ class KeyboardIconsSet private constructor() {
         val defaultIds = when (iconStyle) {
             KeyboardTheme.STYLE_HOLO -> keyboardIconsHolo
             KeyboardTheme.STYLE_ROUNDED -> keyboardIconsRounded
+            KeyboardTheme.STYLE_PIXEL -> keyboardIconsPixel
             else -> keyboardIconsMaterial
         }
         val overrideIds = customIconIds(context, prefs)
@@ -225,6 +226,26 @@ class KeyboardIconsSet private constructor() {
             }
         } }
 
+        /** fork: the keys of the main keyboard in 2dp cells (tools/pixel_icons.py), everything else as in Material */
+        private val keyboardIconsPixel by lazy { HashMap(keyboardIconsMaterial).apply {
+            put(NAME_SHIFT_KEY, R.drawable.sym_keyboard_shift_pixel)
+            put(NAME_SHIFT_KEY_SHIFTED, R.drawable.sym_keyboard_shifted_pixel)
+            put(NAME_SHIFT_KEY_LOCKED, R.drawable.sym_keyboard_shift_lock_pixel)
+            put(NAME_DELETE_KEY, R.drawable.sym_keyboard_delete_pixel)
+            put(NAME_ENTER_KEY, R.drawable.sym_keyboard_return_pixel)
+            put(NAME_GO_KEY, R.drawable.sym_keyboard_next_pixel)
+            put(NAME_SEND_KEY, R.drawable.sym_keyboard_next_pixel)
+            put(NAME_NEXT_KEY, R.drawable.sym_keyboard_next_pixel)
+            put(NAME_PREVIOUS_KEY, R.drawable.sym_keyboard_previous_pixel)
+            put(NAME_SEARCH_KEY, R.drawable.sym_keyboard_search_pixel)
+            put(NAME_DONE_KEY, R.drawable.sym_keyboard_done_pixel)
+            put(NAME_TAB_KEY, R.drawable.sym_keyboard_tab_pixel)
+            put(NAME_SPACE_KEY_FOR_NUMBER_LAYOUT, R.drawable.sym_keyboard_space_pixel)
+            put(NAME_LANGUAGE_SWITCH_KEY, R.drawable.sym_keyboard_language_switch_pixel)
+            put(NAME_TOOLBAR_KEY, R.drawable.sym_keyboard_toolbar_pixel)
+            put(ToolbarKey.EMOJI.name.lowercase(Locale.US), R.drawable.sym_keyboard_smiley_pixel)
+        } }
+
         private val keyboardIconsRounded by lazy { hashMapOf(
             NAME_SHIFT_KEY to                   R.drawable.sym_keyboard_shift_rounded,
             NAME_SHIFT_KEY_SHIFTED to           R.drawable.sym_keyboard_shifted_rounded,
@@ -296,6 +317,7 @@ class KeyboardIconsSet private constructor() {
                 name to when (iconStyle) {
                     KeyboardTheme.STYLE_HOLO -> listOfNotNull(keyboardIconsHolo[name], keyboardIconsRounded[name], id)
                     KeyboardTheme.STYLE_ROUNDED -> listOfNotNull(keyboardIconsRounded[name], id, keyboardIconsHolo[name])
+                    KeyboardTheme.STYLE_PIXEL -> listOfNotNull(keyboardIconsPixel[name], id, keyboardIconsRounded[name], keyboardIconsHolo[name]).distinct()
                     else -> listOfNotNull(id, keyboardIconsRounded[name], keyboardIconsHolo[name])
                 }
             }

@@ -1,6 +1,6 @@
 # HeliBoard
 
-> This repository is a modified version of [HeliBoard](https://github.com/HeliBorg/HeliBoard), licensed under GPL-3.0. Changes made on 2026-11-06 and earlier add the Korean Naratgeul layout and a personal release workflow.
+> This repository is a modified version of [HeliBoard](https://github.com/HeliBorg/HeliBoard), licensed under GPL-3.0. Changes made on 2026-11-06 and earlier add the Korean Naratgeul layout and a personal release workflow. Changes made on 2026-11-14 add the Pixel style.
 
 HeliBoard is a privacy-conscious and customizable open-source keyboard, based on AOSP / OpenBoard.
 Does not use internet permission, and thus is 100% offline.
@@ -10,6 +10,8 @@ Does not use internet permission, and thus is 100% offline.
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">](https://apt.izzysoft.de/fdroid/index/apk/helium314.keyboard)
 
 > **Fork note:** this fork adds a one-handed 12-key Korean layout, Naratgeul (나랏글). See [NARATGEUL.md](NARATGEUL.md). Everything else follows upstream.
+
+> **Fork note:** this fork also adds a style, **Pixel** (Settings → Appearance → Style), in the Pixel Cold War palette of [pixel-icons-cold-war](https://github.com/papillon991/pixel-icons-cold-war). Keys are square plates on a grid of 2dp cells with an ink outline and a bevel, a pressed key sinks into a dark well and shows on a paper tab, and the enter key is paper. Labels are set in NeoDunggeunmo at multiples of 16px (bundled, SIL OFL 1.1, see `LICENSE-OFL-NeoDunggeunmo.txt`; a custom font chosen in the settings wins), and the icons of the main keys are redrawn in the same cells (`tools/pixel_icons.py`). The style has one palette whichever colours are chosen; the palette alone is also in the colour list as *Pixel Cold War* for the other styles. Code: `latin/common/PixelColors.kt`, `keyboard/KeyboardTypeface.kt`.
 
 ## Table of Contents
 
