@@ -32,7 +32,7 @@ class PixelColors(context: Context, backgroundImage: Drawable?) : Colors {
     override val hasKeyBorders = true
 
     /** one cell in screen pixels */
-    private val unit = max(1, (2 * context.resources.displayMetrics.density).roundToInt())
+    val unit = max(1, (2 * context.resources.displayMetrics.density).roundToInt())
 
     private val desk = ContextCompat.getColor(context, R.color.px_desk)
     private val plate = ContextCompat.getColor(context, R.color.px_plate)
@@ -88,6 +88,9 @@ class PixelColors(context: Context, backgroundImage: Drawable?) : Colors {
     }
 
     override fun get(color: ColorType): Int = base.get(color)
+
+    /** the divider between two suggestions: a dotted line, light enough to show on the strip */
+    fun stripDivider(): Drawable = PixelDots(unit, plateLight, 13)
 
     override fun setColor(drawable: Drawable, color: ColorType) = base.setColor(drawable, color)
 
@@ -203,6 +206,23 @@ class PixelStrip(private val unit: Int, private val fill: Int, private val outli
         canvas.drawRect(left, (top + unit).toFloat(), right, (top + 2 * unit).toFloat(), paint)
         paint.color = dark
         canvas.drawRect(left, (bottom - unit).toFloat(), right, bottom.toFloat(), paint)
+    }
+}
+
+/** a column of [cells] cells, one cell wide, every second one filled */
+class PixelDots(private val unit: Int, private val color: Int, private val cells: Int) : PixelDrawable() {
+    override fun getIntrinsicWidth() = unit
+
+    override fun getIntrinsicHeight() = unit * cells
+
+    override fun draw(canvas: Canvas) {
+        paint.color = color
+        val left = bounds.left.toFloat()
+        var top = bounds.top
+        while (top + unit <= bounds.bottom) {
+            canvas.drawRect(left, top.toFloat(), left + unit, (top + unit).toFloat(), paint)
+            top += 2 * unit
+        }
     }
 }
 
