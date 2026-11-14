@@ -47,6 +47,7 @@ import helium314.keyboard.latin.RichInputMethodSubtype;
 import helium314.keyboard.latin.SingleDictionaryFacilitator;
 import helium314.keyboard.latin.common.ColorType;
 import helium314.keyboard.latin.common.Colors;
+import helium314.keyboard.latin.common.PixelColors;
 import helium314.keyboard.latin.settings.Settings;
 import helium314.keyboard.latin.settings.SettingsValues;
 import helium314.keyboard.latin.utils.ResourceUtils;
@@ -258,6 +259,8 @@ public final class EmojiPalettesView extends LinearLayout
         if (initialized) return;
         mEmojiCategory.initialize();
         mTabStrip = (LinearLayout) KeyboardSwitcher.getInstance().getEmojiTabStrip();
+        // Pixel style: the tabs are drawn only while pressed, so the strip under them needs its own band
+        if (mColors instanceof PixelColors) ((PixelColors) mColors).band(mTabStrip);
         if (Settings.getValues().isSecondaryStripVisible()) {
             for (EmojiCategory.CategoryProperties properties : mEmojiCategory.getShownCategories()) {
                 addTab(mTabStrip, properties.getCategory());

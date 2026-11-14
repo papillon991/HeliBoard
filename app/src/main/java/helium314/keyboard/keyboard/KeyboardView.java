@@ -392,6 +392,7 @@ public class KeyboardView extends View {
         if (label != null) {
             paint.setTypeface(KeyboardTypeface.resolve(label, key.selectTypeface(params)));
             paint.setTextSize(key.selectTextSize(params) * mFontSizeMultiplier);
+            KeyboardTypeface.fitToPixelGrid(paint);
             final float labelCharHeight = TypefaceUtils.getReferenceCharHeight(paint);
             final float labelCharWidth = TypefaceUtils.getReferenceCharWidth(paint);
 
@@ -417,7 +418,9 @@ public class KeyboardView extends View {
                     width = Math.min(bg.getBounds().bottom, bg.getBounds().right);
                 } else width = keyWidth;
                 final float ratio = Math.min(1.0f, (width * MAX_LABEL_RATIO) / TypefaceUtils.getStringWidth(label, paint));
-                if (key.needsAutoScale()) {
+                if (ratio < 1.0f && KeyboardTypeface.shrinkOnPixelGrid(paint, ratio)) {
+                    // the Pixel style's font got smaller in whole steps instead
+                } else if (key.needsAutoScale()) {
                     final float autoSize = paint.getTextSize() * ratio;
                     paint.setTextSize(autoSize);
                 } else {
@@ -462,6 +465,7 @@ public class KeyboardView extends View {
             paint.setTextSize(key.selectHintTextSize(params) * mHintFontSizeMultiplier);
             paint.setColor(key.selectHintTextColor(params));
             paint.setTypeface(KeyboardTypeface.resolve(hintLabel, Typeface.DEFAULT_BOLD));
+            KeyboardTypeface.fitToPixelGrid(paint);
             blendAlpha(paint, params.mAnimAlpha);
             final float labelCharHeight = TypefaceUtils.getReferenceCharHeight(paint);
             final float labelCharWidth = TypefaceUtils.getReferenceCharWidth(paint);

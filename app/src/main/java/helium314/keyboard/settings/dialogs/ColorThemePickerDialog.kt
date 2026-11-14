@@ -41,6 +41,7 @@ import helium314.keyboard.keyboard.KeyboardSwitcher
 import helium314.keyboard.keyboard.KeyboardTheme
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.common.ColorType
+import helium314.keyboard.latin.common.PixelPalette
 import helium314.keyboard.latin.common.Links
 import helium314.keyboard.latin.common.decodeBase36
 import helium314.keyboard.latin.settings.Defaults
@@ -80,7 +81,10 @@ fun ColorThemePickerDialog(
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
 
-    val defaultColors = KeyboardTheme.getAvailableDefaultColors(prefs, isNight)
+    // fork: the Pixel style draws in its own palettes only, so it offers just those, and no user colors
+    val pixelStyle = prefs.getString(Settings.PREF_THEME_STYLE, Defaults.PREF_THEME_STYLE) == KeyboardTheme.STYLE_PIXEL
+    val defaultColors = if (pixelStyle) PixelPalette.themeNames
+        else KeyboardTheme.getAvailableDefaultColors(prefs, isNight)
 
     // prefs.all is null in preview only
     val userColors = (prefs.all ?: mapOf(Settings.PREF_USER_COLORS_PREFIX + "usercolor" to "") ).keys.mapNotNull {
@@ -91,11 +95,12 @@ fun ColorThemePickerDialog(
             else -> null
         }
     }.toSortedSet() // we don't want duplicates, and we want a consistent order
+    if (pixelStyle) userColors.clear()
     val selectedColor = prefs.getString(setting.key, default)!!
-    if (selectedColor !in defaultColors)
+    if (selectedColor !in defaultColors && !pixelStyle)
         userColors.add(selectedColor) // there are cases where we have no settings for a user theme
 
-    val colors = listOf("") + userColors + defaultColors
+    val colors = (if (pixelStyle) emptyList() else listOf("") + userColors) + defaultColors
     val state = rememberLazyListState()
     LaunchedEffect(selectedColor) {
         val index = colors.indexOf(selectedColor)
@@ -108,7 +113,7 @@ fun ColorThemePickerDialog(
         cancelButtonText = stringResource(R.string.dialog_close),
         onConfirmed = { },
         confirmButtonText = null,
-        neutralButtonText = stringResource(R.string.load),
+        neutralButtonText = if (pixelStyle) null else stringResource(R.string.load),
         onNeutral = { showLoadDialog = true },
         title = { Text(setting.title) },
         content = {

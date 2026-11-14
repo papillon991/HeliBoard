@@ -178,6 +178,8 @@ object SubtypeUtilsAdditional {
         }*/
         if (isEmojiCapable)
             extraValueItems.add(ExtraValue.EMOJI_CAPABLE)
+        // combining rules are not added here: anything added here and not stripped in toSettingsSubtype breaks
+        // subtype identity. Naratgeul combining rules are derived from the layout in getCombiningRulesExtraValue
         extraValueItems.add(ExtraValue.IS_ADDITIONAL_SUBTYPE)
         return extraValueItems.joinToString(",")
     }

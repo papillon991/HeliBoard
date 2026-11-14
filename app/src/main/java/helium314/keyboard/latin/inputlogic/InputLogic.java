@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 
 import helium314.keyboard.compat.AppWorkarounds;
 import helium314.keyboard.event.Event;
+import helium314.keyboard.event.NaratgeulCombiner;
 import helium314.keyboard.event.InputTransaction;
 import helium314.keyboard.keyboard.Keyboard;
 import helium314.keyboard.keyboard.KeyboardElement;
@@ -484,6 +485,15 @@ public final class InputLogic {
         if (GestureDataGatheringKt.useBackgroundGathering && mWordComposer.isComposingWord() && mWordComposer.isCursorFrontOrMiddleOfComposingWord())
             BackgroundGatheringCache.INSTANCE.onEditWord(mWordComposer.getTypedWord());
 
+        // NaratgeulCombiner would consume or commit the word on any key but shift, which puts the cursor behind the word.
+        // So when the cursor was moved into the word, leave the word as it is and start a new one at the cursor.
+        // This includes the left arrow key sent by space swipe at the start of the text.
+        if ("naratgeul".equals(mWordComposer.getCombiningSpec()) && mWordComposer.isComposingWord()
+                && mWordComposer.isCursorFrontOrMiddleOfComposingWord()
+                && event.getKeyCode() != KeyCode.SHIFT) {
+            resetEntireInputState(mConnection.getExpectedSelectionStart(), mConnection.getExpectedSelectionEnd(), true);
+        }
+
         Event processedEvent = mWordComposer.processEvent(event);
         InputTransaction inputTransaction = new InputTransaction(settingsValues,
                 processedEvent, SystemClock.uptimeMillis(), mSpaceState,
@@ -890,6 +900,9 @@ public final class InputLogic {
                     handleNonFunctionalEvent(event, inputTransaction, handler);
                     return;
                 }
+                // naratgeul key released after switching away from naratgeul, there is nothing to do
+                if (NaratgeulCombiner.Companion.isNaratgeulKey(keyCode))
+                    return;
                 // unknown event
                 Log.e(TAG, "unknown event, key code: "+keyCode+", codepoint "+event.getCodePoint()+", meta: "+event.getMetaState());
                 if (DebugFlags.DEBUG_ENABLED)

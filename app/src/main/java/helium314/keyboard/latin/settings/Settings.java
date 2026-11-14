@@ -92,6 +92,7 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_BLOCK_POTENTIALLY_OFFENSIVE = "block_potentially_offensive";
     public static final String PREF_SHOW_LANGUAGE_SWITCH_KEY = "show_language_switch_key";
     public static final String PREF_LANGUAGE_SWITCH_KEY = "language_switch_key";
+    public static final String PREF_LANGUAGE_SWITCH_TARGET_IME = "language_switch_target_ime";
     public static final String PREF_SHOW_EMOJI_KEY = "show_emoji_key";
     public static final String PREF_SHOW_DPAD_KEY = "show_dpad_key";
    public static final String PREF_VARIABLE_TOOLBAR_DIRECTION = "var_toolbar_direction";
@@ -125,6 +126,7 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_AUTOSPACE_BEFORE_GESTURE_TYPING = "autospace_before_gesture_typing";
     public static final String PREF_SHIFT_REMOVES_AUTOSPACE = "shift_removes_autospace";
     public static final String PREF_ALWAYS_INCOGNITO_MODE = "always_incognito_mode";
+    public static final String PREF_TOUCH_LOG = "touch_log";
     public static final String PREF_BIGRAM_PREDICTIONS = "next_word_prediction";
     public static final String PREF_SUGGEST_PUNCTUATION = "suggest_punctuation";
     public static final String PREF_PUNCTUATION_SUGGESTIONS = "punctuation_suggestions";

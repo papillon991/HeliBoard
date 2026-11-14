@@ -693,6 +693,15 @@
         android:isAsciiCapable="false"
     />
     <subtype android:icon="@drawable/ic_ime_switcher"
+             android:label="@string/subtype_generic_naratgeul"
+             android:subtypeId="0xd7e3f1a2"
+             android:imeSubtypeLocale="ko"
+             android:languageTag="ko"
+             android:imeSubtypeMode="keyboard"
+             android:imeSubtypeExtraValue="KeyboardLayoutSet=MAIN:naratgeul,CombiningRules=naratgeul,SupportTouchPositionCorrection,EmojiCapable"
+             android:isAsciiCapable="false"
+    />
+    <subtype android:icon="@drawable/ic_ime_switcher"
         android:label="@string/subtype_generic"
         android:subtypeId="0x2e391c04"
         android:imeSubtypeLocale="ky"

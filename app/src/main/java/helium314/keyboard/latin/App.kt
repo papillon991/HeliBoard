@@ -15,6 +15,7 @@ import helium314.keyboard.latin.utils.Log
 import helium314.keyboard.latin.utils.SubtypeSettings
 import helium314.keyboard.latin.utils.prefs
 import helium314.keyboard.latin.utils.upgradeToolbarPrefs
+import helium314.keyboard.latin.utils.TouchLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.joinAll
@@ -27,6 +28,7 @@ class App : Application() {
         app = this
         val ctx: Context = this
         DebugFlags.init(this) // needed by several other inits, so do it first
+        TouchLog.init(this)
 
         val scope = CoroutineScope(Dispatchers.Default)
         // other inits can be in parallel, except what depends on SubtypeSettings

@@ -1201,10 +1201,39 @@ public class LatinIME extends InputMethodService implements
         return mOptionsDialog != null && mOptionsDialog.isShowing();
     }
 
+    /** Jump to the language key target keyboard, never via the system IME picker
+     *  (it crashes system_server on Samsung devices without the Samsung keyboard). */
+    public boolean switchToTargetIme() {
+        final String imeId = mSettings.getCurrent().mLanguageSwitchTargetIme;
+        return !imeId.isEmpty() && switchToTargetIme(imeId);
+    }
+
+    private boolean switchToTargetIme(final String imeId) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false;
+        boolean enabled = false;
+        for (final android.view.inputmethod.InputMethodInfo imi : mRichImm.getInputMethodManager().getEnabledInputMethodList()) {
+            if (imi.getId().equals(imeId)) { enabled = true; break; }
+        }
+        if (!enabled) return false;
+        // come back to the first language, otherwise the language key would be stuck at the last one
+        final List<InputMethodSubtype> subtypes = SubtypeSettings.INSTANCE.getEnabledSubtypes(true);
+        if (!subtypes.isEmpty() && !subtypes.get(0).equals(mRichImm.getCurrentSubtype().getRawSubtype()))
+            switchToSubtype(subtypes.get(0));
+        switchInputMethod(imeId);
+        return true;
+    }
+
     // called when language switch key is pressed (either the keyboard key, or long-press comma)
     public void switchToNextSubtype() {
         final boolean switchSubtype = mSettings.getCurrent().mLanguageSwitchKeyToOtherSubtypes;
         final boolean switchIme = mSettings.getCurrent().mLanguageSwitchKeyToOtherImes;
+
+        // with a target keyboard, a short press only cycles own languages; long press jumps to the target
+        if (!mSettings.getCurrent().mLanguageSwitchTargetIme.isEmpty()) {
+            final InputMethodSubtype next = mRichImm.getNextSubtypeInThisIme(true);
+            if (next != null) switchToSubtype(next);
+            return;
+        }
 
         // switch IME if wanted and possible
         if (switchIme && !switchSubtype && ImeCompat.INSTANCE.switchInputMethod(this))

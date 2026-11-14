@@ -73,6 +73,7 @@ fun PreferencesScreen(
             Settings.PREF_SHOW_NUMBER_ROW_IN_SYMBOLS else null,
         Settings.PREF_SHOW_LANGUAGE_SWITCH_KEY,
         Settings.PREF_LANGUAGE_SWITCH_KEY,
+        Settings.PREF_LANGUAGE_SWITCH_TARGET_IME,
         Settings.PREF_SHOW_EMOJI_KEY,
         Settings.PREF_SHOW_DPAD_KEY,
         Settings.PREF_REMOVE_REDUNDANT_POPUPS,
@@ -156,6 +157,13 @@ fun createPreferencesSettings(context: Context) = listOf(
             ),
             Defaults.PREF_LANGUAGE_SWITCH_KEY
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    },
+    Setting(context, Settings.PREF_LANGUAGE_SWITCH_TARGET_IME, R.string.language_switch_target_ime) {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        val items = listOf(stringResource(R.string.language_switch_target_none) to "") +
+            imm.enabledInputMethodList.filter { it.packageName != context.packageName }
+                .map { it.loadLabel(context.packageManager).toString() to it.id }
+        ListPreference(it, items, Defaults.PREF_LANGUAGE_SWITCH_TARGET_IME) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_SHOW_EMOJI_KEY, R.string.show_emoji_key) {
         SwitchPreference(it, Defaults.PREF_SHOW_EMOJI_KEY) { KeyboardSwitcher.getInstance().reloadKeyboard() }
