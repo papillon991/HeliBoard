@@ -1,0 +1,198 @@
+[
+  [
+    {
+      "label": "?",
+      "code": 63,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "'"
+        },
+        "relevant": [
+          {
+            "label": "!noPanelAutoPopupKey!"
+          }
+        ]
+      }
+    },
+    {
+      "label": "ㄱ",
+      "code": -10100,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "1"
+        }
+      }
+    },
+    {
+      "label": "ㄴ",
+      "code": -10101,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "2"
+        }
+      }
+    },
+    {
+      "label": "ㅏㅓ",
+      "code": -10106,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "3"
+        }
+      }
+    },
+    {
+      "label": "delete",
+      "type": "function",
+      "width": 18
+    }
+  ],
+  [
+    {
+      "label": "(",
+      "code": 40,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": ")"
+        }
+      }
+    },
+    {
+      "label": "ㄹ",
+      "code": -10102,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "4"
+        }
+      }
+    },
+    {
+      "label": "ㅁ",
+      "code": -10103,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "5"
+        }
+      }
+    },
+    {
+      "label": "ㅗㅜ",
+      "code": -10107,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "6"
+        }
+      }
+    },
+    {
+      "label": "space",
+      "type": "function",
+      "width": 18
+    }
+  ],
+  [
+    {
+      "label": "!icon/language_switch_key|!code/key_language_switch",
+      "type": "function",
+      "width": 20.5
+    },
+    {
+      "label": "ㅅ",
+      "code": -10104,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "7"
+        }
+      }
+    },
+    {
+      "label": "ㅇ",
+      "code": -10105,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "8"
+        }
+      }
+    },
+    {
+      "label": "ㅣ",
+      "code": -10108,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "9"
+        }
+      }
+    },
+    {
+      "label": "action",
+      "type": "action",
+      "width": 18
+    }
+  ],
+  [
+    {
+      "label": "!#1|!code/key_switch_alpha_symbol",
+      "type": "function",
+      "width": 20.5
+    },
+    {
+      "label": "획",
+      "code": -10110,
+      "width": 20.5,
+      "popup": {
+        "main": {
+            "label": "-"
+        },
+        "relevant": [
+          { "label": "`" }
+        ]
+      }
+    },
+    {
+      "label": "ㅡ",
+      "code": -10109,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "0"
+        }
+      }
+    },
+    {
+      "label": "쌍",
+      "code": -10111,
+      "width": 20.5,
+      "popup": {
+        "main": {
+          "label": "#"
+        },
+        "relevant": [
+          {
+            "label": ":"
+          }
+        ]
+      }
+    },
+    {
+      "label": ".",
+      "code": 46,
+      "width": 18,
+      "popup": {
+        "main": {
+          "label": ","
+        }
+      }
+    }
+  ]
+]

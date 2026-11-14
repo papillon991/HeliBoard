@@ -17,8 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import helium314.keyboard.keyboard.KeyboardSwitcher
 import helium314.keyboard.keyboard.KeyboardTheme
+import helium314.keyboard.keyboard.KeyboardTypeface
 import helium314.keyboard.keyboard.internal.KeyboardIconsSet
 import helium314.keyboard.latin.R
+import helium314.keyboard.latin.common.PixelPalette
 import helium314.keyboard.latin.settings.Defaults
 import helium314.keyboard.latin.utils.Log
 import helium314.keyboard.latin.utils.getActivity
@@ -120,6 +122,15 @@ fun createAppearanceSettings(context: Context) = listOf(
                 if (prefs.getString(Settings.PREF_THEME_COLORS_NIGHT, Defaults.PREF_THEME_COLORS_NIGHT) == KeyboardTheme.THEME_HOLO_WHITE)
                     prefs.edit { remove(Settings.PREF_THEME_COLORS_NIGHT) }
             }
+            if (it == KeyboardTheme.STYLE_PIXEL) {
+                // fork: the Pixel style only has its own palettes, so colors that are not one of them become the first
+                prefs.edit {
+                    for (key in listOf(Settings.PREF_THEME_COLORS, Settings.PREF_THEME_COLORS_NIGHT))
+                        if (prefs.getString(key, null) !in PixelPalette.themeNames)
+                            putString(key, KeyboardTheme.THEME_PIXEL_COLD_WAR)
+                }
+            }
+            KeyboardTypeface.clearCache() // the Pixel style brings its own font
             KeyboardIconsSet.needsReload = true // only relevant for Settings.PREF_CUSTOM_ICON_NAMES
             KeyboardSwitcher.getInstance().setThemeNeedsReload()
         }

@@ -1,10 +1,17 @@
 # HeliBoard
+
+> This repository is a modified version of [HeliBoard](https://github.com/HeliBorg/HeliBoard), licensed under GPL-3.0. Changes made on 2026-11-06 and earlier add the Korean Naratgeul layout and a personal release workflow. Changes made on 2026-11-14 and 2026-11-15 add the Pixel style and its palettes.
+
 HeliBoard is a privacy-conscious and customizable open-source keyboard, based on AOSP / OpenBoard.
 Does not use internet permission, and thus is 100% offline.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/helium314.keyboard/)
 [<img src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" alt="Get APK from GitHub" height="80">](https://github.com/HeliBorg/HeliBoard/releases/latest)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">](https://apt.izzysoft.de/fdroid/index/apk/helium314.keyboard)
+
+> **Fork note:** this fork adds a one-handed 12-key Korean layout, Naratgeul (나랏글). See [NARATGEUL.md](NARATGEUL.md). Everything else follows upstream.
+
+> **Fork note:** this fork also adds a style, **Pixel** (Settings → Appearance → Style), in the Pixel Cold War palette of [pixel-icons-cold-war](https://github.com/papillon991/pixel-icons-cold-war). Keys are square plates on a grid of 2dp cells with an ink outline and a bevel, a pressed key sinks into a dark well and shows on a paper tab, and the enter key is paper. Labels are set in NeoDunggeunmo at multiples of 16px (bundled, SIL OFL 1.1, see `LICENSE-OFL-NeoDunggeunmo.txt`; a custom font chosen in the settings wins), and the icons of the main keys are redrawn in the same cells (`tools/pixel_icons.py`). With this style the colour list offers only its three palettes, *Pixel Cold War*, *Pixel Cold War Berlin* and *Pixel Cold War Moscow* (day and night can differ); they are also in the colour list of the other styles. Code: `latin/common/PixelColors.kt`, `latin/common/PixelPalette.kt`, `keyboard/KeyboardTypeface.kt`.
 
 ## Table of Contents
 

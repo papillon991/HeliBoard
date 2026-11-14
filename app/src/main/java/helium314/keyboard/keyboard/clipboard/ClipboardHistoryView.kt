@@ -28,6 +28,7 @@ import helium314.keyboard.latin.ClipboardHistoryManager
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.common.Constants
+import helium314.keyboard.latin.common.PixelColors
 import helium314.keyboard.latin.database.ClipboardDao
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.utils.ResourceUtils
@@ -99,6 +100,8 @@ class ClipboardHistoryView @JvmOverloads constructor(
             placeholderView = this@ClipboardHistoryView.placeholderView
         }
         val clipboardStrip = KeyboardSwitcher.getInstance().clipboardStrip!!
+        // Pixel style: the keys are drawn only while pressed, so the strip under them needs its own band
+        (colors as? PixelColors)?.band(clipboardStrip.parent as View)
         getEnabledClipboardToolbarKeys(context.prefs()).forEach {
             val key = createToolbarKey(context, it)
             clipboardStrip.addView(key)

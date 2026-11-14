@@ -20,6 +20,8 @@ import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.common.Colors
 import helium314.keyboard.latin.common.DefaultColors
 import helium314.keyboard.latin.common.DynamicColors
+import helium314.keyboard.latin.common.PixelColors
+import helium314.keyboard.latin.common.PixelPalette
 import helium314.keyboard.latin.settings.Defaults
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.utils.ResourceUtils
@@ -47,6 +49,8 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
         const val STYLE_MATERIAL = "Material"
         const val STYLE_HOLO = "Holo"
         const val STYLE_ROUNDED = "Rounded"
+        /** fork: square keys on a grid of 2dp cells, a pixel font and pixel icons, see [PixelColors] */
+        const val STYLE_PIXEL = "Pixel"
 
         // new themes that are just colors
         const val THEME_LIGHT = "light"
@@ -65,6 +69,10 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
         const val THEME_PINK = "pink"
         const val THEME_SAND = "sand"
         const val THEME_VIOLETTE = "violette"
+        /** fork: the palettes of the Pixel style ([PixelPalette]), for use with the other styles too */
+        const val THEME_PIXEL_COLD_WAR = "pixel_cold_war"
+        const val THEME_PIXEL_COLD_WAR_BERLIN = "pixel_cold_war_berlin"
+        const val THEME_PIXEL_COLD_WAR_MOSCOW = "pixel_cold_war_moscow"
         fun getAvailableDefaultColors(prefs: SharedPreferences, isNight: Boolean) = listOfNotNull(
             if (!isNight) THEME_LIGHT else null, THEME_DARK,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) THEME_DYNAMIC else null,
@@ -80,9 +88,12 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
             if (!isNight) THEME_PINK else null,
             THEME_OCEAN,
             if (!isNight) THEME_SAND else null,
-            THEME_VIOLETTE
+            THEME_VIOLETTE,
+            THEME_PIXEL_COLD_WAR,
+            THEME_PIXEL_COLD_WAR_BERLIN,
+            THEME_PIXEL_COLD_WAR_MOSCOW
         )
-        val STYLES = arrayOf(STYLE_MATERIAL, STYLE_HOLO, STYLE_ROUNDED)
+        val STYLES = arrayOf(STYLE_MATERIAL, STYLE_HOLO, STYLE_ROUNDED, STYLE_PIXEL)
 
         // These should be aligned with Keyboard.themeId and Keyboard.Case.keyboardTheme
         // attributes' values in attrs.xml.
@@ -121,6 +132,7 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
             val matchingId = when (style) {
                 STYLE_HOLO -> THEME_ID_HOLO_BASE
                 STYLE_ROUNDED -> if (borders) THEME_ID_ROUNDED_BASE_BORDER else THEME_ID_ROUNDED_BASE
+                STYLE_PIXEL -> THEME_ID_LXX_BASE_BORDER // only for sizes and gaps, the key shapes come from PixelColors
                 else -> if (borders) THEME_ID_LXX_BASE_BORDER else THEME_ID_LXX_BASE
             }
             return KEYBOARD_THEMES.firstOrNull { it.themeId == matchingId } ?: KEYBOARD_THEMES[DEFAULT_THEME_ID]
@@ -147,6 +159,21 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
         private fun getThemeColors(themeName: String, themeStyle: String, context: Context, prefs: SharedPreferences, isNight: Boolean): Colors {
             val hasBorders = prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS)
             val backgroundImage = Settings.readUserBackgroundImage(context, isNight)
+            // the Pixel style draws its own shapes in one of its palettes; other colors fall back to the first
+            val palette = PixelPalette.of(themeName)
+            if (themeStyle == STYLE_PIXEL) return PixelColors(context, palette ?: PixelPalette.COLD_WAR, backgroundImage)
+            if (palette != null) return DefaultColors(
+                themeStyle,
+                hasBorders,
+                palette.accent,
+                palette.desk,
+                palette.raised,
+                palette.plate,
+                palette.raised,
+                palette.paper,
+                palette.dim,
+                keyboardBackground = backgroundImage
+            )
             return when (themeName) {
                 THEME_DYNAMIC -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) DynamicColors(context, themeStyle, hasBorders, backgroundImage)

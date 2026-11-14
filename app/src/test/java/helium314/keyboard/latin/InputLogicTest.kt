@@ -22,15 +22,20 @@ import helium314.keyboard.latin.ShadowFacilitator2.Companion.lastAddedWord
 import helium314.keyboard.latin.common.Constants
 import helium314.keyboard.latin.common.LocaleUtils.constructLocale
 import helium314.keyboard.latin.common.StringUtils
+import helium314.keyboard.latin.define.DebugFlags
 import helium314.keyboard.latin.dictionary.Dictionary
 import helium314.keyboard.latin.inputlogic.InputLogic
 import helium314.keyboard.latin.inputlogic.SpaceState
 import helium314.keyboard.latin.settings.Settings
+import helium314.keyboard.latin.settings.SettingsSubtype.Companion.toSettingsSubtype
 import helium314.keyboard.latin.suggestions.SuggestedWords
 import helium314.keyboard.latin.suggestions.SuggestedWordInfo
+import helium314.keyboard.latin.utils.LayoutType
 import helium314.keyboard.latin.utils.ScriptUtils
+import helium314.keyboard.latin.utils.SubtypeLocaleUtils
 import helium314.keyboard.latin.utils.SubtypeSettings
 import helium314.keyboard.latin.utils.getTimestampFormatter
+import helium314.keyboard.latin.utils.mainLayoutName
 import helium314.keyboard.latin.utils.prefs
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -719,6 +724,284 @@ class InputLogicTest {
         assertEquals(5, cursor)
         latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(1)
         assertEquals(5, cursor)
+    }
+
+    // ------- naratgeul ---------
+
+    private val naratgeulKeys = mapOf(
+        'ㄱ' to KeyCode.NARATGEUL_GIYEOK, 'ㄴ' to KeyCode.NARATGEUL_NIEUN, 'ㄹ' to KeyCode.NARATGEUL_RIEUL,
+        'ㅁ' to KeyCode.NARATGEUL_MIEUM, 'ㅅ' to KeyCode.NARATGEUL_SIOT, 'ㅇ' to KeyCode.NARATGEUL_IEUNG,
+        'ㅏ' to KeyCode.NARATGEUL_A_EO, 'ㅗ' to KeyCode.NARATGEUL_O_U, 'ㅣ' to KeyCode.NARATGEUL_I,
+        'ㅡ' to KeyCode.NARATGEUL_EU, '획' to KeyCode.NARATGEUL_STROKE, '쌍' to KeyCode.NARATGEUL_SSANG,
+        '⌫' to KeyCode.DELETE,
+    )
+
+    // setText refreshes the current subtype from the shadowed InputMethodManager, so the subtype must be set afterwards
+    private fun startNaratgeul(initialText: String = "") {
+        setText(initialText)
+        latinIME.switchToSubtype(
+            SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale()).first { it.mainLayoutName() == "naratgeul" }
+        )
+    }
+
+    /** presses keys as written on the layout: other characters are input as code points */
+    private fun naratgeulInput(keys: String) = keys.forEach { c ->
+        naratgeulKeys[c]?.let { functionalKeyPress(it) } ?: input(c.code)
+    }
+
+    private fun assertNaratgeul(expected: String, keys: String) {
+        startNaratgeul()
+        naratgeulInput(keys)
+        assertEquals(expected, text, "keys: $keys")
+    }
+
+    @Test fun naratgeulConsonantsAndVowels() {
+        listOf(
+            "가" to "ㄱㅏ", "거" to "ㄱㅏㅏ", "가" to "ㄱㅏㅏㅏ", "구" to "ㄱㅗㅗ",
+            "카" to "ㄱ획ㅏ", "다" to "ㄴ획ㅏ", "타" to "ㄴ획획ㅏ", "나" to "ㄴ획획획ㅏ",
+            "바" to "ㅁ획ㅏ", "파" to "ㅁ획획ㅏ", "자" to "ㅅ획ㅏ", "차" to "ㅅ획획ㅏ", "하" to "ㅇ획ㅏ",
+            "까" to "ㄱ쌍ㅏ", "따" to "ㄴ획쌍ㅏ", "빠" to "ㅁ획쌍ㅏ", "싸" to "ㅅ쌍ㅏ", "짜" to "ㅅ획쌍ㅏ",
+            "갸" to "ㄱㅏ획", "겨" to "ㄱㅏㅏ획", "교" to "ㄱㅗ획", "규" to "ㄱㅗㅗ획",
+            "개" to "ㄱㅏㅣ", "게" to "ㄱㅏㅏㅣ", "걔" to "ㄱㅏ획ㅣ", "계" to "ㄱㅏㅏ획ㅣ",
+            "과" to "ㄱㅗㅏ", "괘" to "ㄱㅗㅏㅣ", "괴" to "ㄱㅗㅣ",
+            "궈" to "ㄱㅗㅗㅏ", "궤" to "ㄱㅗㅗㅏㅣ", "귀" to "ㄱㅗㅗㅣ", "긔" to "ㄱㅡㅣ",
+        ).forEach { (expected, keys) -> assertNaratgeul(expected, keys) }
+    }
+
+    @Test fun naratgeulFinalConsonants() {
+        listOf(
+            "간" to "ㄱㅏㄴ", "가나" to "ㄱㅏㄴㅏ", "갇" to "ㄱㅏㄴ획", "각" to "ㄱㅏㄱ", "갂" to "ㄱㅏㄱ쌍", "았" to "ㅇㅏㅅ쌍",
+            "앉" to "ㅇㅏㄴㅅ획", "안자" to "ㅇㅏㄴㅅ획ㅏ", "안사" to "ㅇㅏㄴㅅㅏ", "않" to "ㅇㅏㄴㅇ획",
+            "읽" to "ㅇㅣㄹㄱ", "일가" to "ㅇㅣㄹㄱㅏ", "읽다" to "ㅇㅣㄹㄱㄴ획ㅏ", "넓" to "ㄴㅏㅏㄹㅁ획",
+            "값" to "ㄱㅏㅁ획ㅅ", "갑사" to "ㄱㅏㅁ획ㅅㅏ",
+            "읻" to "ㅇㅣㄴ획", "이ㄸ" to "ㅇㅣㄴ획쌍", "읻" to "ㅇㅣㄴ획쌍쌍", "이따" to "ㅇㅣㄴ획쌍ㅏ",
+            "일ㅋ" to "ㅇㅣㄹㄱ획", "읽" to "ㅇㅣㄹㄱ획획",
+        ).forEach { (expected, keys) -> assertNaratgeul(expected, keys) }
+    }
+
+    // pending compound final consonant is abandoned by another consonant: the pending one must survive
+    @Test fun naratgeulAbandonedCompoundKeepsConsonant() {
+        assertNaratgeul("안ㅇㅇ", "ㅇㅏㄴㅇㅇ")
+        assertNaratgeul("안ㅅㄱ", "ㅇㅏㄴㅅㄱ")
+        assertNaratgeul("일ㄴㄴ", "ㅇㅣㄹㄴㄴ")
+        assertNaratgeul("일ㅇㅇ", "ㅇㅣㄹㅇㅇ")
+    }
+
+    @Test fun naratgeulDeleteGoesJamoByJamoAcrossSyllables() {
+        startNaratgeul("앞 ")
+        naratgeulInput("ㅇ획ㅏㄴㄱㅡㄹ")
+        assertEquals("앞 한글", text)
+        listOf("앞 한그", "앞 한ㄱ", "앞 한", "앞 하", "앞 ㅎ", "앞 ", "앞").forEach { expected ->
+            functionalKeyPress(KeyCode.DELETE)
+            assertEquals(expected, text)
+        }
+    }
+
+    @Test fun naratgeulDeleteCompoundFinalAndVowel() {
+        startNaratgeul()
+        naratgeulInput("ㅇㅏㄴㅅ획ㄱㅗㅏ") // 앉과
+        assertEquals("앉과", text)
+        listOf("앉고", "앉ㄱ", "앉", "안", "아", "ㅇ", "").forEach { expected ->
+            functionalKeyPress(KeyCode.DELETE)
+            assertEquals(expected, text)
+        }
+    }
+
+    @Test fun naratgeulTypingContinuesAfterDeleteIntoPreviousSyllable() {
+        assertNaratgeul("하", "ㅇ획ㅏㄴㄱ⌫⌫") // 한ㄱ -> 한 -> 하
+        assertNaratgeul("한", "ㅇ획ㅏㄴㄱ⌫⌫ㄴ")
+        assertNaratgeul("하나", "ㅇ획ㅏㄴㄱ⌫⌫ㄴㅏ")
+    }
+
+    @Test fun naratgeulDeleteNonHangul() {
+        assertNaratgeul("가", "ㄱㅏ?⌫")
+        assertNaratgeul("", "?⌫")
+        assertNaratgeul("가1", "ㄱㅏ12⌫")
+        startNaratgeul()
+        naratgeulInput("ㄱㅏ")
+        input(0x1D400) // non-emoji supplementary character must not be split
+        input(0x1D401)
+        functionalKeyPress(KeyCode.DELETE)
+        assertEquals("가\uD835\uDC00", text)
+        functionalKeyPress(KeyCode.DELETE)
+        assertEquals("가", text)
+    }
+
+    @Test fun naratgeulEmoji() {
+        startNaratgeul()
+        input(0x1F970)
+        assertEquals("\uD83E\uDD70", text)
+        assertEquals("", composingText)
+        startNaratgeul()
+        naratgeulInput("ㄱㅏ")
+        input(0x1F970)
+        assertEquals("가\uD83E\uDD70", text)
+        naratgeulInput("ㄴㅏ")
+        assertEquals("가\uD83E\uDD70나", text)
+    }
+
+    @Test fun naratgeulSpaceAndEnterCommit() {
+        assertNaratgeul("가 ", "ㄱㅏ ")
+        assertNaratgeul("가 나", "ㄱㅏ ㄴㅏ")
+    }
+
+    // input used to end up behind the composing word, because setting composing text moves the cursor to its end
+    @Test fun naratgeulInputAtCursorMovedInsideComposingWord() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ") // 사과
+        assertEquals("사과", composingText)
+        setCursorPosition(1)
+        naratgeulInput("ㄴㅏ")
+        assertEquals("사나과", text)
+        assertEquals("나", composingText)
+        assertEquals(2, cursor)
+    }
+
+    @Test fun naratgeulInputAtCursorMovedBySpaceSwipe() {
+        listOf(true, false).forEach { showSuggestions ->
+            latinIME.prefs().edit { putBoolean(Settings.PREF_SHOW_SUGGESTIONS, showSuggestions) }
+            startNaratgeul()
+            naratgeulInput("ㅅㅏㄱㅗㅏ")
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-1)
+            assertEquals(1, cursor)
+            naratgeulInput("ㄴㅏ")
+            assertEquals("사나과", text, "suggestions: $showSuggestions")
+            assertEquals(2, cursor)
+
+            startNaratgeul()
+            naratgeulInput("ㅅㅏㄱㅗㅏ")
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-2)
+            assertEquals(0, cursor)
+            naratgeulInput("ㄴㅏ")
+            assertEquals("나사과", text, "suggestions: $showSuggestions")
+            assertEquals(1, cursor)
+
+            startNaratgeul()
+            naratgeulInput("ㅅㅏㄱㅗㅏ")
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-1)
+            functionalKeyPress(KeyCode.DELETE)
+            assertEquals("과", text, "suggestions: $showSuggestions")
+            assertEquals(0, cursor)
+        }
+    }
+
+    // swiping further at the very start of the text: no text to move over, so a left arrow key is sent
+    @Test fun naratgeulInputAfterSpaceSwipePastStartOfText() {
+        listOf(true, false).forEach { showSuggestions ->
+            latinIME.prefs().edit { putBoolean(Settings.PREF_SHOW_SUGGESTIONS, showSuggestions) }
+            startNaratgeul()
+            naratgeulInput("ㅅㅏㄱㅗㅏ")
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-1)
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-1)
+            latinIME.mKeyboardActionListener.onHorizontalSpaceSwipe(-1)
+            assertEquals(0, cursor)
+            naratgeulInput("ㄴㅏ")
+            assertEquals("나사과", text, "suggestions: $showSuggestions")
+            assertEquals(1, cursor)
+        }
+    }
+
+    // other functional keys go through the combiner too, which would put the cursor behind the word
+    @Test fun naratgeulFunctionalKeyAtCursorMovedInsideComposingWord() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ")
+        setCursorPosition(1)
+        functionalKeyPress(KeyCode.SYMBOL_ALPHA)
+        functionalKeyPress(KeyCode.SYMBOL_ALPHA)
+        naratgeulInput("ㄴㅏ")
+        assertEquals("사나과", text)
+        assertEquals(2, cursor)
+    }
+
+    @Test fun naratgeulInputAtCursorMovedToFrontOfComposingWord() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ")
+        setCursorPosition(0)
+        naratgeulInput("ㄴㅏ")
+        assertEquals("나사과", text)
+        assertEquals(1, cursor)
+    }
+
+    @Test fun naratgeulOtherInputAtCursorMovedInsideComposingWord() {
+        // input() expects the cursor to stay inside the composing word, but here a new word is started
+        listOf("사?과" to '?'.code, "사#과" to '#'.code, "사 과" to ' '.code, "사😀과" to 0x1F600).forEach { (expected, codePoint) ->
+            startNaratgeul()
+            naratgeulInput("ㅅㅏㄱㅗㅏ")
+            setCursorPosition(1)
+            latinIME.onEvent(Event.createSoftwareKeypressEvent(codePoint, codePoint, 0, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false))
+            handleMessages()
+            assertEquals(expected, text)
+            assertEquals(1 + Character.charCount(codePoint), cursor, expected)
+        }
+    }
+
+    @Test fun naratgeulDeleteAtCursorMovedInsideComposingWord() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ")
+        setCursorPosition(1)
+        functionalKeyPress(KeyCode.DELETE)
+        assertEquals("과", text)
+        assertEquals(0, cursor)
+    }
+
+    @Test fun naratgeulTypingAfterInputAtMovedCursorStaysAtCursor() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ")
+        setCursorPosition(1)
+        naratgeulInput("ㄴㅏㄹ") // 받침까지 커서 위치에서 조합
+        assertEquals("사날과", text)
+        functionalKeyPress(KeyCode.DELETE)
+        assertEquals("사나과", text)
+        assertEquals(2, cursor)
+    }
+
+    // moving the cursor back to the end of the word must not break anything, only the combiner state is gone
+    @Test fun naratgeulInputAfterCursorReturnedToEndOfComposingWord() {
+        startNaratgeul()
+        naratgeulInput("ㅅㅏㄱㅗㅏ")
+        setCursorPosition(1)
+        setCursorPosition(2)
+        naratgeulInput("ㄴㅏ")
+        assertEquals("사과나", text)
+        assertEquals(3, cursor)
+    }
+
+    // key may be released after the subtype changed, then the combiner chain doesn't know naratgeul codes
+    @Test fun naratgeulKeyWithOtherCombinerIsIgnored() {
+        val debug = DebugFlags.DEBUG_ENABLED
+        DebugFlags.DEBUG_ENABLED = true
+        try {
+            setText("a")
+            functionalKeyPress(KeyCode.NARATGEUL_MIEUM)
+            assertEquals("a", text)
+            setText("")
+            latinIME.switchToSubtype(SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale()).first())
+            functionalKeyPress(KeyCode.NARATGEUL_STROKE)
+            assertEquals("", text)
+        } finally {
+            DebugFlags.DEBUG_ENABLED = debug
+        }
+    }
+
+    @Test fun naratgeulCombiningRulesFollowMainLayout() {
+        val korean = SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale()).first().toSettingsSubtype()
+        val toNaratgeul = korean.withLayout(LayoutType.MAIN, "naratgeul")
+        assertEquals("naratgeul", SubtypeLocaleUtils.getCombiningRulesExtraValue(toNaratgeul.toAdditionalSubtype()))
+        val backToKorean = toNaratgeul.withLayout(LayoutType.MAIN, "korean")
+        assertEquals("hangul", SubtypeLocaleUtils.getCombiningRulesExtraValue(backToKorean.toAdditionalSubtype()))
+    }
+
+    // settings find enabled and selected subtypes by comparing SettingsSubtypes, so the round trip must not change them
+    @Test fun naratgeulSubtypesSurviveRoundTrip() {
+        val korean = SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale()).first().toSettingsSubtype()
+        val naratgeul = SubtypeSettings.getResourceSubtypesForLocale("ko".constructLocale())
+            .first { it.mainLayoutName() == "naratgeul" }.toSettingsSubtype()
+        listOf(
+            korean.withLayout(LayoutType.SYMBOLS, "symbols_arabic"),
+            korean.withLayout(LayoutType.MAIN, "naratgeul"),
+            naratgeul.withLayout(LayoutType.SYMBOLS, "symbols_arabic"),
+            naratgeul.withLayout(LayoutType.MAIN, "korean"),
+        ).forEach { assertEquals(it, it.toAdditionalSubtype().toSettingsSubtype()) }
     }
 
     // ------- helper functions ---------
