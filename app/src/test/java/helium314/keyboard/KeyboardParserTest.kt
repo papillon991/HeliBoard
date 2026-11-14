@@ -481,6 +481,12 @@ f""", // no newline at the end
         assertEquals(Key.BACKGROUND_TYPE_SPACEBAR, space.backgroundType)
     }
 
+    @Test fun `naratgeul enter key has the action background`() {
+        val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
+        val (kb, _) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.ALPHABET)
+        assertEquals(1, kb.sortedKeys.count { it.backgroundType == Key.BACKGROUND_TYPE_ACTION })
+    }
+
     @Test fun `naratgeul symbols still have functional keys`() {
         val subtype = SubtypeUtilsAdditional.createEmojiCapableAdditionalSubtype(Locale.KOREAN, "naratgeul", false)
         val (kb, _) = buildKeyboard(EditorInfo(), subtype, KeyboardElement.SYMBOLS)

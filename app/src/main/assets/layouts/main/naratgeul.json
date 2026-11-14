@@ -136,7 +136,7 @@
     },
     {
       "label": "action",
-      "type": "function",
+      "type": "action",
       "width": 18
     }
   ],
